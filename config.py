@@ -82,7 +82,7 @@ async def get_config_value(key: str, default: Any = None, env_var: Optional[str]
         # 检查值是否存在（不是None），允许空字符串、0、False等有效值
         if value is not None:
             return value
-    except Exception as e:
+    except Exception:
         # Debug: print import/storage errors
         # print(f"Config storage error for key {key}: {e}")
         pass
@@ -199,7 +199,7 @@ def get_available_models(router_type="openai"):
         # 基础模型
         models.append(base_model)
         
-        if(base_model in PUBLIC_API_MODELS):
+        if (base_model in PUBLIC_API_MODELS):
             continue
         
         # 假流式模型 (前缀格式)
@@ -342,7 +342,13 @@ async def get_code_assist_endpoint() -> str:
     TOML config key: code_assist_endpoint
     Default: https://cloudcode-pa.googleapis.com
     """
-    return str(await get_config_value("code_assist_endpoint", "https://cloudcode-pa.googleapis.com", "CODE_ASSIST_ENDPOINT"))
+    return str(
+        await get_config_value(
+            "code_assist_endpoint",
+            "https://cloudcode-pa.googleapis.com",
+            "CODE_ASSIST_ENDPOINT",
+        )
+    )
 
 async def get_auto_load_env_creds() -> bool:
     """
@@ -385,7 +391,12 @@ async def get_oauth_proxy_url() -> str:
     TOML config key: oauth_proxy_url
     Default: https://oauth2.googleapis.com
     """
-    return str(await get_config_value("oauth_proxy_url", "https://oauth2.googleapis.com", "OAUTH_PROXY_URL"))
+    return str(
+        await get_config_value(
+            "oauth_proxy_url", "https://oauth2.googleapis.com", "OAUTH_PROXY_URL"
+        )
+    )
+
 
 async def get_googleapis_proxy_url() -> str:
     """
@@ -397,7 +408,13 @@ async def get_googleapis_proxy_url() -> str:
     TOML config key: googleapis_proxy_url
     Default: https://www.googleapis.com
     """
-    return str(await get_config_value("googleapis_proxy_url", "https://www.googleapis.com", "GOOGLEAPIS_PROXY_URL"))
+    return str(
+        await get_config_value(
+            "googleapis_proxy_url",
+            "https://www.googleapis.com",
+            "GOOGLEAPIS_PROXY_URL",
+        )
+    )
 
 
 async def get_resource_manager_api_url() -> str:
@@ -410,7 +427,14 @@ async def get_resource_manager_api_url() -> str:
     TOML config key: resource_manager_api_url
     Default: https://cloudresourcemanager.googleapis.com
     """
-    return str(await get_config_value("resource_manager_api_url", "https://cloudresourcemanager.googleapis.com", "RESOURCE_MANAGER_API_URL"))
+    return str(
+        await get_config_value(
+            "resource_manager_api_url",
+            "https://cloudresourcemanager.googleapis.com",
+            "RESOURCE_MANAGER_API_URL",
+        )
+    )
+
 
 async def get_service_usage_api_url() -> str:
     """
@@ -422,7 +446,13 @@ async def get_service_usage_api_url() -> str:
     TOML config key: service_usage_api_url
     Default: https://serviceusage.googleapis.com
     """
-    return str(await get_config_value("service_usage_api_url", "https://serviceusage.googleapis.com", "SERVICE_USAGE_API_URL"))
+    return str(
+        await get_config_value(
+            "service_usage_api_url",
+            "https://serviceusage.googleapis.com",
+            "SERVICE_USAGE_API_URL",
+        )
+    )
 
 
 # MongoDB Configuration

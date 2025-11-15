@@ -45,11 +45,13 @@ def _create_error_response(message: str, status_code: int = 500) -> Response:
 async def _handle_api_error(
     credential_manager: CredentialManager, status_code: int, response_content: str = ""
 ):
-    """Handle API errors by rotating credentials when needed. Error recording should be done before calling this function."""
+    """Handle API errors by rotating credentials when needed.
+    Error recording should be done before calling this function."""
     if status_code == 429 and credential_manager:
         if response_content:
             log.error(
-                f"Google API returned status 429 - quota exhausted. Response details: {response_content[:500]}"
+                f"Google API returned status 429 - quota exhausted. "
+                f"Response details: {response_content[:500]}"
             )
         else:
             log.error("Google API returned status 429 - quota exhausted, switching credentials")
@@ -63,11 +65,13 @@ async def _handle_api_error(
     ):
         if response_content:
             log.error(
-                f"Google API returned status {status_code} - auto ban triggered. Response details: {response_content[:500]}"
+                f"Google API returned status {status_code} - auto ban triggered. "
+                f"Response details: {response_content[:500]}"
             )
         else:
             log.warning(
-                f"Google API returned status {status_code} - auto ban triggered, rotating credentials"
+                f"Google API returned status {status_code} - auto ban triggered, "
+                f"rotating credentials"
             )
         await credential_manager.force_rotate_credential()
 
@@ -178,11 +182,13 @@ async def send_gemini_request(
                         # 显示详细的429错误信息
                         if response_content:
                             log.error(
-                                f"Google API returned status 429 (STREAMING). Response details: {response_content[:500]}"
+                                f"Google API returned status 429 (STREAMING). "
+                                f"Response details: {response_content[:500]}"
                             )
                         else:
                             log.error(
-                                "Google API returned status 429 (STREAMING) - quota exhausted, no response details available"
+                                "Google API returned status 429 (STREAMING) - "
+                                "quota exhausted, no response details available"
                             )
 
                         if credential_manager and current_file:
@@ -248,7 +254,8 @@ async def send_gemini_request(
                         # 显示详细的错误信息
                         if response_content:
                             log.error(
-                                f"Google API returned status {resp.status_code} (STREAMING). Response details: {response_content[:500]}"
+                                f"Google API returned status {resp.status_code} (STREAMING). "
+                                f"Response details: {response_content[:500]}"
                             )
                         else:
                             log.error(
@@ -358,7 +365,8 @@ async def send_gemini_request(
         except Exception as e:
             if attempt < max_retries:
                 log.warning(
-                    f"[RETRY] Request failed with exception, retrying ({attempt + 1}/{max_retries}): {str(e)}"
+                    f"[RETRY] Request failed with exception, "
+                    f"retrying ({attempt + 1}/{max_retries}): {str(e)}"
                 )
                 await asyncio.sleep(retry_interval)
                 continue
@@ -400,21 +408,25 @@ def _handle_streaming_response_managed(
                 if isinstance(content_bytes, bytes):
                     response_content = content_bytes.decode("utf-8", errors="ignore")
             except Exception as e:
-                log.debug(f"[STREAMING] Failed to read response content for error analysis: {e}")
+                log.debug(
+                    f"[STREAMING] Failed to read response content for error analysis: {e}"
+                )
                 response_content = ""
 
             # 显示详细错误信息
             if resp.status_code == 429:
                 if response_content:
                     log.error(
-                        f"Google API returned status 429 (STREAMING). Response details: {response_content[:500]}"
+                        f"Google API returned status 429 (STREAMING). "
+                        f"Response details: {response_content[:500]}"
                     )
                 else:
                     log.error("Google API returned status 429 (STREAMING)")
             else:
                 if response_content:
                     log.error(
-                        f"Google API returned status {resp.status_code} (STREAMING). Response details: {response_content[:500]}"
+                        f"Google API returned status {resp.status_code} (STREAMING). "
+                        f"Response details: {response_content[:500]}"
                     )
                 else:
                     log.error(f"Google API returned status {resp.status_code} (STREAMING)")
@@ -555,21 +567,25 @@ async def _handle_non_streaming_response(
                 if isinstance(content_bytes, bytes):
                     response_content = content_bytes.decode("utf-8", errors="ignore")
         except Exception as e:
-            log.debug(f"[NON-STREAMING] Failed to read response content for error analysis: {e}")
+            log.debug(
+                f"[NON-STREAMING] Failed to read response content for error analysis: {e}"
+            )
             response_content = ""
 
         # 显示详细错误信息
         if resp.status_code == 429:
             if response_content:
                 log.error(
-                    f"Google API returned status 429 (NON-STREAMING). Response details: {response_content[:500]}"
+                    f"Google API returned status 429 (NON-STREAMING). "
+                    f"Response details: {response_content[:500]}"
                 )
             else:
                 log.error("Google API returned status 429 (NON-STREAMING)")
         else:
             if response_content:
                 log.error(
-                    f"Google API returned status {resp.status_code} (NON-STREAMING). Response details: {response_content[:500]}"
+                    f"Google API returned status {resp.status_code} (NON-STREAMING). "
+                    f"Response details: {response_content[:500]}"
                 )
             else:
                 log.error(f"Google API returned status {resp.status_code} (NON-STREAMING)")

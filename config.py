@@ -82,7 +82,7 @@ async def get_config_value(key: str, default: Any = None, env_var: Optional[str]
         # 检查值是否存在（不是None），允许空字符串、0、False等有效值
         if value is not None:
             return value
-    except Exception as e:
+    except Exception:
         # Debug: print import/storage errors
         # print(f"Config storage error for key {key}: {e}")
         pass
@@ -199,7 +199,7 @@ def get_available_models(router_type="openai"):
         # 基础模型
         models.append(base_model)
         
-        if(base_model in PUBLIC_API_MODELS):
+        if (base_model in PUBLIC_API_MODELS):
             continue
         
         # 假流式模型 (前缀格式)

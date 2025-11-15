@@ -10,8 +10,7 @@ import os
 import time
 import zipfile
 from collections import deque
-from typing import List, Optional, Dict, Any
-from urllib.parse import urlparse
+from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException, Depends, File, UploadFile, WebSocket, WebSocketDisconnect, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, Response
@@ -20,7 +19,6 @@ from pydantic import BaseModel
 from starlette.websockets import WebSocketState
 import toml
 import zipfile
-import httpx
 
 import config
 from log import log
@@ -870,7 +868,7 @@ async def creds_batch_action(request: CredFileBatchActionRequest, token: str = D
         # 构建返回消息
         result_message = f"批量操作完成：成功处理 {success_count}/{len(filenames)} 个文件"
         if errors:
-            result_message += f"\n错误详情：\n" + "\n".join(errors)
+            result_message += "\n错误详情：\n" + "\n".join(errors)
             
         response_data = {
             "success_count": success_count,

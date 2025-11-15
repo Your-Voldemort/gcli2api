@@ -505,10 +505,10 @@ class AntiTruncationStreamProcessor:
                 if isinstance(chunk, bytes):
                     prefix = b'data: '
                     suffix = b'\n\n'  # 确保有正确的换行符
-                    json_data = json.dumps(modified_data, separators=(',',':'), ensure_ascii=False).encode('utf-8')
+                    json_data = json.dumps(modified_data, separators=(',', ':'), ensure_ascii=False).encode('utf-8')
                     return prefix + json_data + suffix
                 else:
-                    return f"data: {json.dumps(modified_data, separators=(',',':'), ensure_ascii=False)}\n\n"
+                    return f"data: {json.dumps(modified_data, separators=(',', ':'), ensure_ascii=False)}\n\n"
             
             # 处理OpenAI格式
             elif "choices" in data:
@@ -531,10 +531,10 @@ class AntiTruncationStreamProcessor:
                 if isinstance(chunk, bytes):
                     prefix = b'data: '
                     suffix = b'\n\n'  # 确保有正确的换行符
-                    json_data = json.dumps(modified_data, separators=(',',':'), ensure_ascii=False).encode('utf-8')
+                    json_data = json.dumps(modified_data, separators=(',', ':'), ensure_ascii=False).encode('utf-8')
                     return prefix + json_data + suffix
                 else:
-                    return f"data: {json.dumps(modified_data, separators=(',',':'), ensure_ascii=False)}\n\n"
+                    return f"data: {json.dumps(modified_data, separators=(',', ':'), ensure_ascii=False)}\n\n"
             
             # 如果没有找到支持的格式，返回原始chunk
             return chunk

@@ -372,7 +372,7 @@ async def convert_streaming_response(gemini_response, model: str) -> StreamingRe
                     try:
                         gemini_chunk = json.loads(payload.decode())
                         openai_chunk = gemini_stream_chunk_to_openai(gemini_chunk, model, response_id)
-                        yield f"data: {json.dumps(openai_chunk, separators=(',',':'))}\n\n".encode()
+                        yield f"data: {json.dumps(openai_chunk, separators=(',', ':'))}\n\n".encode()
                     except json.JSONDecodeError:
                         continue
             else:

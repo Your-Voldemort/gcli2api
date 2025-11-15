@@ -50,7 +50,7 @@ def _write_to_file(message: str):
         _file_writing_disabled = True
         _disable_reason = str(e)
         print(f"Warning: File system appears to be read-only or permission denied. Disabling log file writing: {e}", file=sys.stderr)
-        print(f"Log messages will continue to display in console only.", file=sys.stderr)
+        print("Log messages will continue to display in console only.", file=sys.stderr)
     except Exception as e:
         # 其他异常仍然输出警告但不禁用写入（可能是临时问题）
         print(f"Warning: Failed to write to log file: {e}", file=sys.stderr)

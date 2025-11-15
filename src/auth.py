@@ -41,7 +41,7 @@ MAX_AUTH_FLOWS = 20  # 严格限制最大认证流程数
 def cleanup_auth_flows_for_memory():
     """清理认证流程以释放内存"""
     global auth_flows
-    cleaned = cleanup_expired_flows()
+    cleanup_expired_flows()
     # 如果还是太多，强制清理一些旧的流程
     if len(auth_flows) > 10:
         # 按创建时间排序，保留最新的10个
@@ -168,15 +168,6 @@ async def create_auth_url(project_id: Optional[str] = None, user_session: str = 
             }
         
         # 创建OAuth流程
-        client_config = {
-            "installed": {
-                "client_id": CLIENT_ID,
-                "client_secret": CLIENT_SECRET,
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://oauth2.googleapis.com/token",
-            }
-        }
-        
         flow = Flow(
             client_id=CLIENT_ID,
             client_secret=CLIENT_SECRET,
@@ -267,7 +258,7 @@ def wait_for_callback_sync(state: str, timeout: int = 300) -> Optional[str]:
     start_time = time.time()
     while time.time() - start_time < timeout:
         if flow_data.get('code'):
-            log.info(f"OAuth回调成功完成")
+            log.info("OAuth回调成功完成")
             return flow_data['code']
         time.sleep(0.5)  # 每0.5秒检查一次
         
@@ -505,7 +496,7 @@ async def asyncio_complete_auth_flow(project_id: Optional[str] = None, user_sess
         
         # 如果没有指定项目ID或没找到匹配的，查找需要自动检测项目ID的流程
         if not state:
-            log.info(f"没有找到指定项目的流程，查找自动检测流程")
+            log.info("没有找到指定项目的流程，查找自动检测流程")
             for s, data in auth_flows.items():
                 log.debug(f"检查流程 {s}: auto_project_detection={data.get('auto_project_detection', False)}")
                 if data.get('auto_project_detection', False):
@@ -551,7 +542,7 @@ async def asyncio_complete_auth_flow(project_id: Optional[str] = None, user_sess
             log.info(f"使用提供的项目ID: {project_id}")
         
         # 检查是否已经有授权码
-        log.info(f"开始检查OAuth授权码...")
+        log.info("开始检查OAuth授权码...")
         max_wait_time = 60  # 最多等待60秒
         wait_interval = 1   # 每秒检查一次
         waited = 0
@@ -596,7 +587,7 @@ async def asyncio_complete_auth_flow(project_id: Optional[str] = None, user_sess
         oauthlib.oauth2.rfc6749.parameters.validate_token_parameters = patched_validate
         
         try:
-            log.info(f"调用flow.exchange_code...")
+            log.info("调用flow.exchange_code...")
             credentials = await flow.exchange_code(auth_code)
             log.info(f"成功获取凭证，token前缀: {credentials.access_token[:20] if credentials.access_token else 'None'}...")
             

@@ -168,7 +168,7 @@ async def send_gemini_request(payload: dict, is_streaming: bool = False, credent
                         # 清理资源
                         try:
                             await stream_ctx.__aexit__(None, None, None)
-                        except:
+                        except Exception:
                             pass
                         await client.aclose()
                         
@@ -221,7 +221,7 @@ async def send_gemini_request(payload: dict, is_streaming: bool = False, credent
                         # 清理资源
                         try:
                             await stream_ctx.__aexit__(None, None, None)
-                        except:
+                        except Exception:
                             pass
                         await client.aclose()
                         
@@ -247,7 +247,7 @@ async def send_gemini_request(payload: dict, is_streaming: bool = False, credent
                     # 清理资源
                     try:
                         await client.aclose()
-                    except:
+                    except Exception:
                         pass
                     raise e
 
@@ -278,7 +278,7 @@ async def send_gemini_request(payload: dict, is_streaming: bool = False, credent
                             await asyncio.sleep(retry_interval)
                             continue
                         else:
-                            log.error(f"[RETRY] Max retries exceeded for 429 error")
+                            log.error("[RETRY] Max retries exceeded for 429 error")
                             return _create_error_response("429 rate limit exceeded, max retries reached", 429)
                     else:
                         # 非429错误或成功响应，正常处理
@@ -306,11 +306,11 @@ def _handle_streaming_response_managed(resp, stream_ctx, client, credential_mana
         async def cleanup_and_error():
             try:
                 await stream_ctx.__aexit__(None, None, None)
-            except:
+            except Exception:
                 pass
             try:
                 await client.aclose()
-            except:
+            except Exception:
                 pass
             
             # 获取响应内容用于详细错误显示
@@ -328,7 +328,7 @@ def _handle_streaming_response_managed(resp, stream_ctx, client, credential_mana
                 if response_content:
                     log.error(f"Google API returned status 429 (STREAMING). Response details: {response_content[:500]}")
                 else:
-                    log.error(f"Google API returned status 429 (STREAMING)")
+                    log.error("Google API returned status 429 (STREAMING)")
             else:
                 if response_content:
                     log.error(f"Google API returned status {resp.status_code} (STREAMING). Response details: {response_content[:500]}")
@@ -381,7 +381,7 @@ def _handle_streaming_response_managed(resp, stream_ctx, client, credential_mana
                     obj = json.loads(payload)
                     if "response" in obj:
                         data = obj["response"]
-                        yield f"data: {json.dumps(data, separators=(',',':'))}\n\n".encode()
+                        yield f"data: {json.dumps(data, separators=(',', ':'))}\n\n".encode()
                         await asyncio.sleep(0)  # 让其他协程有机会运行
                         
                         # 定期释放内存（每100个chunk）
@@ -390,7 +390,7 @@ def _handle_streaming_response_managed(resp, stream_ctx, client, credential_mana
                             if managed_stream_generator._chunk_count % 100 == 0:
                                 gc.collect()
                     else:
-                        yield f"data: {json.dumps(obj, separators=(',',':'))}\n\n".encode()
+                        yield f"data: {json.dumps(obj, separators=(',', ':'))}\n\n".encode()
                 except json.JSONDecodeError:
                     continue
                     
@@ -468,7 +468,7 @@ async def _handle_non_streaming_response(resp, credential_manager: CredentialMan
             if response_content:
                 log.error(f"Google API returned status 429 (NON-STREAMING). Response details: {response_content[:500]}")
             else:
-                log.error(f"Google API returned status 429 (NON-STREAMING)")
+                log.error("Google API returned status 429 (NON-STREAMING)")
         else:
             if response_content:
                 log.error(f"Google API returned status {resp.status_code} (NON-STREAMING). Response details: {response_content[:500]}")

@@ -160,8 +160,7 @@ class CredentialManager:
                             available_credentials.append(credential_name)
                 except Exception as e:
                     log.warning(
-                        f"Failed to batch load credential states, falling back to individual checks: {e}"
-                    )
+     f"Failed to batch load credential states, falling back to individual checks: {e}" )
                     # 如果批量读取失败，回退到逐个检查
                     for credential_name in all_credentials:
                         try:

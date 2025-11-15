@@ -29,7 +29,8 @@ class HttpxClientManager:
         return client_kwargs
     
     @asynccontextmanager
-    async def get_client(self, timeout: float = 30.0, **kwargs) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async def get_client(self, timeout: float = 30.0, **
+                         kwargs) -> AsyncGenerator[httpx.AsyncClient, None]:
         """获取配置好的异步HTTP客户端"""
         client_kwargs = await self.get_client_kwargs(timeout=timeout, **kwargs)
         
@@ -37,7 +38,8 @@ class HttpxClientManager:
             yield client
     
     @asynccontextmanager
-    async def get_streaming_client(self, timeout: float = None, **kwargs) -> AsyncGenerator[httpx.AsyncClient, None]:
+    async def get_streaming_client(self, timeout: float = None, **
+                                   kwargs) -> AsyncGenerator[httpx.AsyncClient, None]:
         """获取用于流式请求的HTTP客户端（无超时限制）"""
         client_kwargs = await self.get_client_kwargs(timeout=timeout, **kwargs)
         
@@ -158,9 +160,14 @@ class StreamingContext:
 
 
 @asynccontextmanager
-async def get_streaming_post_context(url: str, data: Any = None, json: Any = None,
-                                   headers: Optional[Dict[str, str]] = None,
-                                   timeout: float = None, **kwargs) -> AsyncGenerator[StreamingContext, None]:
+async def get_streaming_post_context(url: str,
+    data: Any = None,
+    json: Any = None,
+    headers: Optional[Dict[str,
+    str]] = None,
+    timeout: float = None,
+    **kwargs) -> AsyncGenerator[StreamingContext,
+     None]:
     """获取流式POST请求的上下文管理器"""
     async with http_client.get_streaming_client(timeout=timeout, **kwargs) as client:
         stream_ctx = client.stream("POST", url, data=data, json=json, headers=headers)

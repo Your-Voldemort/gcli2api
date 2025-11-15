@@ -303,7 +303,7 @@ class AntiTruncationStreamProcessor:
                     )
                     log.info(
                         f"Anti-truncation: No [done] marker found in output (length: {total_length}), preparing continuation (attempt {
-        self.current_attempt + 1})"
+         self.current_attempt + 1})"
                     )
                     if self.collected_content and total_length > 100:
                         last_chunk = self.collected_content[-1] if self.collected_content else ""
